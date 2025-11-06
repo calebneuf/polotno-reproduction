@@ -5,14 +5,14 @@ export const metadata: Metadata = {
   description: "Reproduction project for polotno issue",
 };
 
-export default function RootLayout({
+export default function MinimalLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, padding: 0 }}>
+      <body>
         {children}
       </body>
     </html>

@@ -1,34 +1,80 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { Toaster } from 'sonner';
+import { useMemo } from 'react';
+import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
+import { Toolbar } from 'polotno/toolbar/toolbar';
+import { PagesTimeline } from 'polotno/pages-timeline';
+import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
+import { Workspace } from 'polotno/canvas/workspace';
+import { createStore } from 'polotno/model/store';
 
-// Dynamically import PolotnoEditor with SSR disabled since it uses react-konva
-const PolotnoEditor = dynamic(
-  () => import('../components/PolotnoEditor'),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-muted-foreground">Loading editor...</div>
-      </div>
-    )
-  }
-);
+/**
+ * Minimal reproduction for both bugs:
+ * 
+ * Bug 1 - Page Reordering Error:
+ * - Drag/reorder pages in PagesTimeline
+ * - Error: "Cannot read properties of null (reading 'findOne')" / "No stage is found for element"
+ * 
+ * Bug 2 - Popover Alignment Issue:
+ * - Hover over toolbar buttons to see tooltips
+ * - Open side panel and interact with elements that show popovers
+ * - Bug: Popovers appear in top-left corner instead of correctly positioned
+ */
+export default function Home() {
+  const store = useMemo(() => {
+    const newStore = createStore({
+      key: typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_POLOTNO_API_KEY || '' : '',
+      showCredit: true,
+    });
 
-export default function GuidebooksPage() {
+    // Create multiple pages with content to test reordering
+    const page1 = newStore.addPage();
+    page1.addElement({
+      type: 'text',
+      text: 'Page 1 - Drag pages to test reordering',
+      x: 100,
+      y: 100,
+      fontSize: 20,
+    });
+
+    const page2 = newStore.addPage();
+    page2.addElement({
+      type: 'text',
+      text: 'Page 2 - Hover toolbar for popover test',
+      x: 100,
+      y: 100,
+      fontSize: 20,
+    });
+
+    return newStore;
+  }, []);
+
   return (
-    <div className="relative w-full h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-3.75rem)]">
-      <div className="w-full h-full relative">
-        <PolotnoEditor 
-          showCredit={true}
-          onSave={(design) => {
-            // Handle auto-save if needed
-            console.log('Design saved:', design);
-          }}
+    <div style={{ width: '100%', height: '100vh' }}>
+      <PolotnoContainer
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative'
+        }}
+        className="polotno-container"
+      >
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/@blueprintjs/core@5/lib/css/blueprint.css"
         />
-      </div>
-      <Toaster position="top-center" />
+        <SidePanelWrap>
+          <SidePanel
+            store={store}
+            sections={DEFAULT_SECTIONS}
+          />
+        </SidePanelWrap>
+        <WorkspaceWrap>
+          <Toolbar store={store} downloadButtonEnabled />
+          <Workspace store={store} />
+          <PagesTimeline store={store} />
+        </WorkspaceWrap>
+      </PolotnoContainer>
     </div>
   );
 }
