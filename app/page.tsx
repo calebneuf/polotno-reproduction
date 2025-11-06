@@ -19,7 +19,7 @@ const PolotnoEditor = dynamic(
 export default function GuidebooksPage() {
   return (
     <div className="relative w-full h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-3.75rem)]">
-      <div className="w-full h-full relative" style={{ isolation: 'isolate' }}>
+      <div className="w-full h-full relative">
         <PolotnoEditor 
           showCredit={true}
           onSave={(design) => {
