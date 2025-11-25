@@ -1,0 +1,11 @@
+{
+  "template": "node",
+  "container": {
+    "startScript": "dev"
+  },
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "node": "18"
+}
+

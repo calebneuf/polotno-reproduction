@@ -1,0 +1,16 @@
+{
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "npm install"
+    }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "dev",
+      "runAtStart": true,
+      "command": "npm run dev"
+    }
+  }
+}
+
