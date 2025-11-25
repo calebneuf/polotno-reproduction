@@ -1,12 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
-import { PolotnoContainer, SidePanelWrap, WorkspaceWrap } from 'polotno';
-import { Toolbar } from 'polotno/toolbar/toolbar';
-import { PagesTimeline } from 'polotno/pages-timeline';
-import { SidePanel, DEFAULT_SECTIONS } from 'polotno/side-panel';
-import { Workspace } from 'polotno/canvas/workspace';
-import { createStore } from 'polotno/model/store';
+import dynamic from 'next/dynamic';
 
 /**
  * Minimal reproduction for both bugs:
@@ -20,62 +14,27 @@ import { createStore } from 'polotno/model/store';
  * - Open side panel and interact with elements that show popovers
  * - Bug: Popovers appear in top-left corner instead of correctly positioned
  */
+
+// Dynamically import Polotno components with SSR disabled to avoid "document is not defined" error
+const PolotnoTestPage = dynamic(
+  () => import('../components/PolotnoTestPage'),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{ 
+        width: '100%', 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+      }}>
+        Loading Polotno Editor...
+      </div>
+    ),
+  }
+);
+
 export default function Home() {
-  const store = useMemo(() => {
-    const newStore = createStore({
-      key: typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_POLOTNO_API_KEY || '' : '',
-      showCredit: true,
-    });
-
-    // Create multiple pages with content to test reordering
-    const page1 = newStore.addPage();
-    page1.addElement({
-      type: 'text',
-      text: 'Page 1 - Drag pages to test reordering',
-      x: 100,
-      y: 100,
-      fontSize: 20,
-    });
-
-    const page2 = newStore.addPage();
-    page2.addElement({
-      type: 'text',
-      text: 'Page 2 - Hover toolbar for popover test',
-      x: 100,
-      y: 100,
-      fontSize: 20,
-    });
-
-    return newStore;
-  }, []);
-
-  return (
-    <div style={{ width: '100%', height: '100vh' }}>
-      <PolotnoContainer
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'relative'
-        }}
-        className="polotno-container"
-      >
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/@blueprintjs/core@5/lib/css/blueprint.css"
-        />
-        <SidePanelWrap>
-          <SidePanel
-            store={store}
-            sections={DEFAULT_SECTIONS}
-          />
-        </SidePanelWrap>
-        <WorkspaceWrap>
-          <Toolbar store={store} downloadButtonEnabled />
-          <Workspace store={store} />
-          <PagesTimeline store={store} />
-        </WorkspaceWrap>
-      </PolotnoContainer>
-    </div>
-  );
+  return <PolotnoTestPage />;
 }
 

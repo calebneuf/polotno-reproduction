@@ -16,7 +16,7 @@
     "mobx-react-lite": "^4.0.7",
     "next": "^15.2.2",
     "next-themes": "^0.4.4",
-    "polotno": "^2.29.5",
+    "polotno": "3.0.0-6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sonner": "^2.0.1",
@@ -32,13 +32,6 @@
     "eslint-config-next": "15.2.2",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "overrides": {
-    "polotno": {
-      "react": "^19",
-      "react-dom": "^19",
-      "react-konva": "^19.0.3"
-    }
   }
 }
 
