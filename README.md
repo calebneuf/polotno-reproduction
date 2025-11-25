@@ -24,8 +24,8 @@ npm run dev
 
 This project matches the configuration from your main project:
 - Next.js 15.2.2 with Turbopack
-- React 19 (via overrides for polotno)
-- polotno 2.29.5
+- React 19
+- polotno 3.0.0-6
 - TypeScript
 - Tailwind CSS
 - next-themes for dark mode support
