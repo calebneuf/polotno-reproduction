@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.0.0",
     "canvas": "^3.2.0",
     "lucide-react": "^0.484.0",
     "mobx": "^6.13.0",
